@@ -1,54 +1,37 @@
-<!doctype html>
-<html lang="en">
+<?php
+include 'share/header.php';
+include 'share/form.php';
+include 'share/footer.php';
+include 'connect.php';
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
+if (isset($_POST['submit'])) {
+    $name = $_POST['name'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $password = $_POST['password'];
+    $details = $_POST['details'];
 
-<body>
-    <div class="container">
+    // Check if email already exists
+    $check_email_query = "SELECT * FROM users WHERE email = '$email'";
+    $check_result = mysqli_query($con, $check_email_query);
 
-        <form class="mt-5 col d-flex flex-column gap-3">
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Username</label>
-                <input type="name" class="form-control" id="exampleInputName1" aria-describedby="textHelp" placeholder="Enter Your Username">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your data with anyone else.</small>
-            </div>
-            <div class="form-group ">
-                <label for="exampleInputEmail1">Full Name</label>
-                <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="textHelp" placeholder="Enter Your Full Name">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your data with anyone else.</small>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Confirm Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">Details About Yourself</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
+    if (mysqli_num_rows($check_result) > 0) {
+        echo "❌ Error: Email already exists!";
+    } else {
+        // ✅ Insert data if email is unique
+        $sql = "INSERT INTO `users` (name, username, email, phone, password, details)
+                VALUES ('$name', '$username', '$email', '$phone', '$password', '$details')";
 
-            <button type="submit" class="btn btn-primary w-25">Submit</button>
-        </form>
-    </div>
+        $result = mysqli_query($con, $sql);
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+        if ($result) {
+            // echo "✅ Data inserted successfully!";
+            header('location:display.php');
+        } else {
+            die("❌ Error inserting data: " . mysqli_error($con));
+        }
+    }
+}
 
-</html>
+include 'share/footer.php';

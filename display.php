@@ -44,6 +44,9 @@ include 'connect.php';
                     <td><?= $email ?></td>
                     <td><?= $phone ?></td>
                     <td>
+                        <a href="update.php?update_id=<?= $id ?>" class="btn btn-warning">
+                            Update
+                        </a>
                         <a href="delete.php?id=<?= $id ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">
                             Delete
                         </a>

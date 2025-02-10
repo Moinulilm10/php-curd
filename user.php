@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
 
         if ($result) {
             // echo "✅ Data inserted successfully!";
-            header('location:display.php');
+            header('location:index.php');
         } else {
             die("❌ Error inserting data: " . mysqli_error($con));
         }
